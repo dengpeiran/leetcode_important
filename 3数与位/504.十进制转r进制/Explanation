@@ -1,0 +1,30 @@
+10进制转r进制的方法是通用的：
+
+用10进制树去除以r得到的余数放在res的后面，再将最后一位通过除法除以r去除掉。以此往复知道数字为0为止。
+最后根据原数字是不是负数再在res后面加上负号。
+翻转整个res就可以得到r进制结果。
+
+这是10进制数字转7进制的算法：
+func convertToBase7(num int) string {
+	if num == 0 {
+		return "0"
+	}
+	flag := num < 0
+	res := []byte{}
+	if flag {
+		num = -num
+	}
+	for num > 0 {
+		res = append(res, '0'+byte(num%7)) //0的作用是保证此处求余结果是0时依然有0转化为字符，否则会是空字符
+		num /= 7
+	}
+	if flag {
+		res = append(res, '-')
+	}
+	for i, n := 0, len(res); i < n/2; i++ {
+		res[i], res[n-1-i] = res[n-1-i], res[i]
+	}
+
+	return string(res)
+
+}
