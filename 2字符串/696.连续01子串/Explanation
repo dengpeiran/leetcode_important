@@ -1,0 +1,21 @@
+这一题主要是题目难懂，其实题目的意思就是一串二进制数中所有aabb、ab、aaabbb这一类的子串有多少个。
+用pre保存前一个连续0或1的个数，用cur保存现在的这个1或0的个数，遍历一遍字符串，其中前一个连续1或0的个数比cur大，那么结果肯定加一。
+比如有11100当遍历到0时，pre是3，那么cur为1也就是第一个0时，肯定有一个10符合，当遍历到第二个0时，cur为2，肯定有1100符合
+
+代码如下：
+func countBinarySubstrings(s string) int {
+	var pre, cur, res int//pre是前一个字符的个数，cur是当前字符的个数，res是结果
+	for i := 0; i < len(s); i++ {//遍历字符串
+		if i == 0 || s[i] == s[i-1] {//如果是第一个字符或者当前字符和前一个字符相同，cur++，否则pre=cur，cur=1
+			cur++
+		} else {
+			pre = cur
+			cur = 1
+		}
+		if pre >= cur {//如果前一个字符的个数大于等于当前字符的个数，结果++，否则不变
+			res++
+		}
+	}
+	return res
+
+}

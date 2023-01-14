@@ -1,0 +1,36 @@
+这一题我认为很重要，不仅是树的递归问题，还利用了分治思想。
+本题思路：既然要求两个节点之间最远距离，那么我认为大概率会跨过一个左右子树的根，那么我们把每一个节点左右子树的最大深度相加，就是这个经过这个结点的最长路径了。
+于是递归就是从这开始，我们首先将原树的根节点进行nil判定，再利用go的闭包函数，内置一个从根节点开始递归的计算节点两边深度的函数dept，该函数会读取外部变量max来保存当前最长的直径。
+my code:
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func diameterOfBinaryTree(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	max := 0
+	var dept func(root *TreeNode) int //计算深度,go闭包函数可以访问外部变量，省略了传参
+	dept = func(root *TreeNode) int {
+		if root == nil {
+			return 0
+		}
+		left := dept(root.Left)
+		right := dept(root.Right)
+		if left+right > max {
+			max = left + right
+		}
+		if left > right {
+			return left + 1
+		}
+		return right + 1
+
+	}
+	dept(root)
+
+	return max
+
+}

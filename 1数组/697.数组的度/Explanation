@@ -1,0 +1,26 @@
+本题用两个哈希表来记录每个数字出现次数和第一次数显的位置，这样循环的时候当一个数字出现多次时，都可以在第n次出现的位置求出到第一次出现的距离。
+本题有一个细节要注意：判断当前元素出现次数是否大于最大出现次数来更新最小长度的时候，还需要判断出现相同的出现次数的两个树会让最小长度改变
+比如 12313，循环到第二个1时，长度会固定在1231也就是4，但是循环到3后，最大出现次数没有变，长度会缩小到313也就是3
+
+my code：
+func findShortestSubArray(nums []int) int {
+	var maxCount, minLen int
+	count := make(map[int]int) // 记录每个元素出现的次数
+	first := make(map[int]int) // 记录每个元素第一次出现的位置
+	for i, n := range nums {
+		if _, ok := first[n]; !ok {
+			first[n] = i
+		}
+		count[n]++               // 记录当前元素出现次数+1
+		if count[n] > maxCount { // 如果当前元素出现次数大于最大出现次数
+			maxCount = count[n]
+			minLen = i - first[n] + 1 // 更新最小长度
+		} else if count[n] == maxCount {
+			if l := i - first[n] + 1; l < minLen {
+				minLen = l
+			}
+		}
+	}
+	return minLen
+
+}

@@ -1,0 +1,49 @@
+这一题我认为非常重要是因为，一开始我在做的时候并没有思路，一味的在想如何单纯地通过数据结构来遍历每一层的间隔节点距离，但是很显然比较难实现。
+
+于是查看代码，发现了一个关键的算法，那就是用一个哈希表保存每个节点应该在完全二叉树中的位置，利用根节点序号的2倍和2倍+1来表示左右子树节点的位置。其余的部分和层次遍历保持一致。但是也有两点我认为比较容易出错的：
+1.在遍历每一层的队列时，要用一个length保存一下开始时的队列长度，因为在读这一层时出队入队操作会影响队列长度。当然这一点是层次遍历本身的易错点。
+2.每次读完一行，都需要利用哈希表把下一行首尾两个节点的距离算出来比大小，但是这个过程一定要在上一行在队列中被完全出队后才可以进行，否则会出错。
+
+my code：
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func widthOfBinaryTree(root *TreeNode) int {
+	queue := []*TreeNode{root}
+	//初始化一个哈希表，保存每个节点的位置
+	m := make(map[*TreeNode]int)
+	m[root] = 1 //根节点的位置为1
+	max := 0
+	if root == nil {
+		return 0
+	}
+	for len(queue) > 0 {
+		//将队列中最后一个元素和第一个元素的位置相减，得到的就是最大宽度
+		width := m[queue[len(queue)-1]] - m[queue[0]] + 1
+		if width > max {
+			max = width
+		}
+		length := len(queue)
+		for i := 0; i < length; i++ {
+			//将队列中的元素出队,并将其左右子节点入队，同时将其位置也存入哈希表中
+			node := queue[0]
+			queue = queue[1:]
+			if node.Left != nil {
+				queue = append(queue, node.Left)
+				m[node.Left] = m[node] * 2
+
+			}
+			if node.Right != nil {
+				queue = append(queue, node.Right)
+				m[node.Right] = m[node]*2 + 1
+			}
+
+		}
+
+	}
+	return max
+
+}

@@ -1,0 +1,37 @@
+本题的意思是在26个字母组成的循环字符串的子串中，找到给定字符串p所包含的个数。
+简单来说就是abc ab bcd efgh za zab yza 这些字符串只要被p包含 就算一次
+
+那么要统计p中所有符合条件的字符串个数，就要用到前缀和的思路，即p中每个字符为结尾的前序字符串最长有多长是连续的，那么以这个字符结尾的符合条件的字符串就有多少个。
+
+而这个算法中有一个巧妙之处，那就是在对每个字符结尾的前序最长字符计算时，会用一个maxlen来记录，那么如果当前字符和上一个字符连上了，直接在maxlen上加1，如果被断，直接将maxlen归为1.
+这样做就可以让前面连续的字符串长度继续续上
+
+func findSubstringInWraproundString(p string) int {
+	if len(p) == 0 { //如果字符串为空，直接返回0
+		return 0
+	}
+	dp := make([]int, 26) //dp[i]表示以字母i结尾的最长连续子串的长度
+	dp[p[0]-'a'] = 1      //初始化dp[0]为1
+	maxLen := 1
+	for i := 1; i < len(p); i++ { //遍历字符串
+		if p[i] == p[i-1]+1 || p[i] == p[i-1]-25 { //如果当前字符和前一个字符相差1或者相差25，最长连续子串的长度加1
+			maxLen++
+		} else { //否则，最长连续子串的长度为1
+			maxLen = 1
+		}
+		dp[p[i]-'a'] = max(dp[p[i]-'a'], maxLen)
+	}
+	sum := 0
+	for _, v := range dp {
+		sum += v
+	}
+	return sum
+
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
+}

@@ -1,0 +1,32 @@
+给你一个字符串 s 和一个字符串数组 dictionary ，找出并返回 dictionary 中最长的字符串，该字符串可以通过删除 s 中的某些字符得到。
+如果答案不止一个，返回长度最长且字母序最小的字符串。如果答案不存在，则返回空字符串。
+
+要解答这一问题必须考虑要找到最长的符合条件的删除子串。主函数的作用就是在符合条件的删除子串中找到一个长度最长的，另一个函数就是专门来判断该字符串是不是dictionary中的子串。
+
+func findLongestWord(s string, dictionary []string) string {
+	var res string
+	for _, word := range dictionary {
+		if len(res) < len(word) || len(res) == len(word) && res > word { //找到一个最长的符合条件的子串，如果长度一样就比较字符序
+			if issub(s, word) {
+				res = word
+			}
+
+		}
+	}
+	return res
+
+}
+
+func issub(s string, word string) bool {//用来识别子串是不是符合条件，这个思路就是递归，每一位和word对比，如果一样就同时挪动比较下一位，一直到s或word走到完。
+	if len(word) == 0 {
+		return true
+	}
+	if len(s) == 0 {
+		return false
+	}
+	if s[0] == word[0] {
+		return issub(s[1:], word[1:])
+	}
+	return issub(s[1:], word)
+
+}

@@ -1,0 +1,37 @@
+用哈希表存每个节点对应值的出现次数，遍历完树后遍历哈希表，当k-哈希表的key=另一个哈希表的key时对应value大于1即表明有相加为k的一对节点存在。
+
+my code：
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func findTarget(root *TreeNode, k int) bool {
+	set := map[int]int{}// 用map来存储已经遍历过的节点
+	var dfs func(*TreeNode)
+	dfs = func(node *TreeNode) {// 深度优先遍历
+		if node == nil {
+			return
+		}
+		set[node.Val]++
+		if node.Left != nil {
+			dfs(node.Left)
+		}
+		if node.Right != nil {
+			dfs(node.Right)
+		}
+		return
+	}
+	dfs(root)
+	for key := range set {// 遍历map
+		if k-key != key && set[k-key] > 0 {// 如果k-key不等于key，且k-key在map中存在
+			return true
+		}
+		if k-key == key && set[k-key] > 1 {
+			return true
+		}
+	}
+	return false
+
+}

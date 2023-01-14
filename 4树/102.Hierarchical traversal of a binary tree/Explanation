@@ -1,0 +1,46 @@
+利用队列入栈每一层，先记录当前这一层的节点总数，以这个总数为界限每读一个节点就入队左右子树，一层的节点读完为为一层遍历。最后读到队空为止。
+
+my code：
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func levelOrder(root *TreeNode) [][]int {
+	//初始化一个队列
+	queue := []*TreeNode{root}
+	//初始化一个结果集
+	result := [][]int{}
+	//如果根节点为空，直接返回结果集
+	if root == nil {
+		return result
+	}
+	//循环队列，直到队列为空
+	for len(queue) > 0 {
+		//初始化一个临时切片，用于存放每层的节点值
+		temp := []int{}
+		//获取队列的长度
+		length := len(queue)
+		//循环队列，将每层的节点值存入临时切片
+		for i := 0; i < length; i++ {
+			//将队列的第一个节点取出
+			node := queue[0]
+			//将队列的第一个节点的值存入临时切片
+			temp = append(temp, node.Val)
+			//将队列的第一个节点的左右节点存入队列
+			if node.Left != nil {
+				queue = append(queue, node.Left)
+			}
+			if node.Right != nil {
+				queue = append(queue, node.Right)
+			}
+			//将队列的第一个节点移除
+			queue = queue[1:]
+		}
+		//将每层的节点值存入结果集
+		result = append(result, temp)
+	}
+	return result
+
+}

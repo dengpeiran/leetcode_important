@@ -1,0 +1,36 @@
+这一题是数学几何体题目。目的是将二维数组旋转90度。有两种方式可以解决：
+1.用翻转代替旋转，对原二维数组进行主对角线翻转和上下水平翻转即可做到旋转90度。先后执行不区分顺序：
+func rotate(matrix [][]int) {
+	n := len(matrix)
+	// 1. 主对角线翻转
+	for i := 0; i < n; i++ { //行
+		for j := i; j < n; j++ { //列
+			matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j] //交换
+		}
+	}
+	// 2. 垂直翻转
+	for i := 0; i < n; i++ { //行
+		for j := 0; j < n/2; j++ { //列
+			matrix[i][j], matrix[i][n-j-1] = matrix[i][n-j-1], matrix[i][j] //交换
+		}
+	}
+
+}
+
+
+2.对其做出翻转操作，原二维数组第一行变为旋转后的最后一列。即对于矩阵中第 i 行的第 j 个元素，在旋转后，它出现在倒数第 i 列的第 j 个位置。
+
+func rotate(matrix [][]int) {
+	n := len(matrix)
+	temp := make([][]int, n)
+	for i := 0; i < n; i++ {
+		temp[i] = make([]int, n)
+	}
+	for i, row := range matrix { //读取原数组的每一行
+		for j, v := range row { //读取原数组一行的每一个元素
+			temp[j][n-i-1] = v //将原数组的每一个元素放到新数组的对应位置
+		}
+
+	}
+
+}

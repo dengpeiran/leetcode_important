@@ -1,0 +1,28 @@
+This question means to calculate the subtree sum of all nodes and output the subtree sum with the most occurrences. Then to solve some unknown worth counting problem, a hash table is used.
+
+my code:
+func findFrequentTreeSum(root *TreeNode) []int {
+	cnt := map[int]int{} // 记录每个子树的和出现的次数
+	maxCnt := 0
+	var dfs func(*TreeNode) int
+	dfs = func(node *TreeNode) int {
+		if node == nil {
+			return 0
+		}
+		sum := node.Val + dfs(node.Left) + dfs(node.Right)
+		cnt[sum]++ // 记录每个子树的和出现的次数
+		if cnt[sum] > maxCnt {
+			maxCnt = cnt[sum] // 记录最大的出现次数
+		}
+		return sum
+	}
+	dfs(root)
+	var res []int
+	for s, c := range cnt { // 遍历map，找出出现次数最多的子树和
+		if c == maxCnt {
+			res = append(res, s)
+		}
+	}
+	return res
+
+}

@@ -1,0 +1,33 @@
+这一题其实本质上就是层次遍历，只需要在每一层的遍历开始时记录一下当前这一层队首的节点值，这就是一行最左的值，当层次遍历完成后，最后保存的一个队首值就是最下方最左侧的值
+
+my code：
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func findBottomLeftValue(root *TreeNode) int {
+	if root == nil {
+		return 0
+	}
+	var temp int
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		len := len(queue)
+		temp = queue[0].Val      //与层次遍历唯一的区别
+		for i := 0; i < len; i++ {
+			root = queue[0]
+			queue = queue[1:]
+			if root.Left != nil {
+				queue = append(queue, root.Left)
+			}
+			if root.Right != nil {
+				queue = append(queue, root.Right)
+			}
+
+		}
+	}
+	return temp
+
+}

@@ -1,0 +1,40 @@
+The first response to this question was a direct DFS with only two lines of code to solve, so I began to question why it was a medium difficulty, so I opened the question to find that the official solution used the binary equals path method. That's interesting.
+
+
+my code：
+func countNodes(root *TreeNode) int {
+    if root==nil{
+        return 0
+    }
+    return 1+countNodes(root.Left)+countNodes(root.Right)
+}
+
+
+official solution：
+func countNodes(root *TreeNode) int {
+    if root == nil {
+        return 0
+    }
+    level := 0
+    for node := root; node.Left != nil; node = node.Left {
+        level++
+    }
+    return sort.Search(1<<(level+1), func(k int) bool {
+        if k <= 1<<level {
+            return false
+        }
+        bits := 1 << (level - 1)
+        node := root
+        for node != nil && bits > 0 {
+            if bits&k == 0 {
+                node = node.Left
+            } else {
+                node = node.Right
+            }
+            bits >>= 1
+        }
+        return node == nil
+    }) - 1
+}
+
+This problem uses a principle similar to Huffman tree, after finding the last row of leaf nodes, using the corresponding binary position of each node, one by one to find whether the position has a value, if not, that is the last leaf for the last leaf of the full binary tree

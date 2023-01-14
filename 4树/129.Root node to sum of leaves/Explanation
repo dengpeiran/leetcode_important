@@ -1,0 +1,26 @@
+本题是比较容易的递归，本质是从跟加到每个叶子节点的代数和。
+出递归的条件是nil或者遇到叶子结点，此时会向上返回，直到退回根节点
+
+my code：
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func sumNumbers(root *TreeNode) int {
+	return sumfuc(root, 0)
+}
+
+func sumfuc(root *TreeNode, sum int) int {
+	if root == nil {
+		return 0
+	}
+	sum = sum*10 + root.Val
+	if root.Left == nil && root.Right == nil {
+		return sum
+	}
+	return sumfuc(root.Left, sum) + sumfuc(root.Right, sum)
+
+
+}

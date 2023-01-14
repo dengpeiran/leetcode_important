@@ -1,0 +1,20 @@
+此题采用了另一个数组来一一赋值的方法，首先另外一个数组长度和待轮转的一样。
+逐一读取原数组的每个数字，将新数组推移后的最终位置进行赋值。此处需要对其进行求余，因为最后轮转超出数组长度范围时会溢出。
+
+package main
+
+import "fmt"
+
+func rotate(nums []int, k int) {
+	newNums := make([]int, len(nums))
+	for i, v := range nums {
+		newNums[(i+k)%len(nums)] = v//这里是关键,取余数,防止越界,取余数的方法很巧妙,可以参考下
+	}
+	copy(nums, newNums)//这里是关键,将新的数组赋值给原数组,这样就不用返回新的数组了
+}
+
+func main() {
+	nums := []int{1, 2, 3, 4, 5, 6, 7}
+	rotate(nums, 3)
+	fmt.Println(nums)
+}

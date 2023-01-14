@@ -1,0 +1,37 @@
+给定一个字符串数组，每行存一个字符串，要求找出里面最长的一个子串，并且该子串只能是来自于其中一个字符串，不能是其他字符串的子串。
+
+算法逻辑则是，首先一个字符串的子序列如果不是其他字符串的子序列，那么这个字符串本身也一定不是。
+因为包含这个字符串本身的，一定也能包含它的任意子序列。
+所以题目变为从字符串数组中找最长的一个原字符串，该字符串不是其他字符串的子序列。
+根据数据范围，暴力模拟判断即可。
+
+func findLUSlength(strs []string) int {
+	var max int
+	for i := 0; i < len(strs); i++ {
+		for j := 0; j < len(strs); j++ {
+			if i != j && isSubsequence(strs[i], strs[j]) { //判断是否是子序列
+				break
+
+			}
+			if j == len(strs)-1 && len(strs[i]) > max { //判断在遍历完一轮后i对应原字符串是否是最长的子序列
+				max = len(strs[i])
+			}
+		}
+	}
+	if max == 0 {
+		return -1
+	}
+	return max
+
+}
+
+func isSubsequence(s string, t string) bool { //判断是否是子序列,LCS算法
+	i, j := 0, 0
+	for i < len(s) && j < len(t) {
+		if s[i] == t[j] {
+			i++
+		}
+		j++
+	}
+	return i == len(s)
+}

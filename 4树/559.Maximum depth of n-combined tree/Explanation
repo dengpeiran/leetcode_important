@@ -1,0 +1,22 @@
+深度就是最简单的递归每个节点的所有子树，找到一条返回值最大的+1向上返回。 没有多余的思路，一开始做错了，是因为设置了一个最终的最大值，并使用了闭包函数来深度遍历，但是返回值是最终的最大值，这会导致深度重复计算。
+
+my code：
+type Node struct {
+	Val      int
+	Children []*Node
+}
+
+func maxDepth(root *Node) int {
+	if root == nil {
+		return 0
+	}
+	maxChild := 0
+	for _, child := range root.Children {
+		temp := maxDepth(child)
+		if temp > maxChild {
+			maxChild = temp
+		}
+	}
+	return maxChild + 1
+
+}

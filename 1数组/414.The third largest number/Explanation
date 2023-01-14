@@ -1,0 +1,16 @@
+把数组排序，然后找到第三大的数字。
+sort.Sort(sort.Reverse(xxxxxxxxxxxx))就是把sort从大到小反向排序，正常的sort.sort()是从小到大排序
+
+my code:
+func thirdMax(nums []int) int {
+	sort.Sort(sort.Reverse(sort.IntSlice(nums))) //将数组反转，从大到小排序
+	for i, diff := 1, 1; i < len(nums); i++ {
+		if nums[i] != nums[i-1] {
+			diff++
+			if diff == 3 { // 此时 nums[i] 就是第三大的数
+				return nums[i]
+			}
+		}
+	}
+	return nums[0]
+}

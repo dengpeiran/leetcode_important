@@ -1,0 +1,9 @@
+利用自带的sort.Ints()排序
+
+func hIndex(citations []int) (h int) {
+	sort.Ints(citations) //排序,默认升序，如果要降序，则使用sort.Sort(sort.Reverse(sort.IntSlice(citations)))
+	for i := len(citations) - 1; i >= 0 && citations[i] > h; i-- {
+		h++
+	}
+	return
+}

@@ -1,0 +1,127 @@
+本题利用暴力搜索的方法即可完成，但是整个过程极其复杂，最主要的问题就是找到第一个数和第二个数，也就是找到前三个数。
+一旦在字符串结束前找到前三个数，就以这三个数将字符复现，再和实际的对比即可。
+
+package main
+
+import (
+	"fmt"
+	"strconv"
+)
+
+func isAdditiveNumber(num string) bool {
+	flag := false
+	var add1, add2 string
+
+	//穷举第一个数和第二个数
+	for i := 1; i <= len(num); i++ {
+		for j := 1; j <= len(num)-i; j++ {
+			for k := 1; k <= len(num)-i-j; k++ {
+				//如果一个数以0开头且长度大于1，跳过
+				if (num[0] == '0' && i > 1) || (num[i] == '0' && j > 1) || (num[i+j] == '0' && k > 1) {
+					continue
+				}
+				//第一个数
+				a := num[0:i]
+				//第二个数
+				b := num[i : i+j]
+				//第三个数
+				c := num[i+j : i+j+k]
+				//第一个数和第二个数的和
+				sum := add_simple(a, b)
+				//第三个数和第一个数和第二个数的和相等
+				/* fmt.Println(a, b, c, sum) */
+				if sum == c {
+					flag = true
+					add1 = a
+					add2 = b
+					break
+				}
+
+			}
+		}
+	}
+	if !flag {
+		return false
+	} else {
+		//以第一个数和第二个数为基础，将字符串写出到原字符串的长度
+		//初始化一个字符串，将第一个数和第二个数写入
+		str := add1 + add2
+		//循环写入
+		for len(str) < len(num) {
+			//将第一个数和第二个数相加
+			sum := add_simple(add1, add2)
+			//将第一个数和第二个数的和写入
+			str += sum
+			//将第二个数和第一个数和第二个数的和写入
+			add1 = add2
+			add2 = sum
+		}
+		//如果写出的字符串和原字符串相等，返回true
+		if str == num {
+			return true
+		} else {
+			return false
+		}
+
+	}
+
+}
+
+//两个数字相加，先将字符串转换为数字，再相加，最后将数字转换为字符串，这样就可以用+来连接字符串
+//这个相加更简单，不需要考虑进位，也不需要对其，但是要使用strconv包
+//最主要的知识点就是字符串的问题，我们将字符串单独读取每一位后，每一位都是一个byte类型（uint8）的数据，将他直接转化为int来加减时，需要把它作为ascii码来处理，所以需要减去‘0’，这样就可以用int（）来处理每一位。这也是add函数中的处理方法。
+func add_simple(a, b string) string {
+	result := ""
+	temp := 0
+	add1, err := strconv.Atoi(a)
+	add2, err := strconv.Atoi(b)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+	temp = add1 + add2
+	result = strconv.Itoa(temp)
+
+	return result
+}
+
+//两个数字相加，读取字符串每一位的byte类型数据，将其转换为int类型数据，对齐然后相加，最后将int类型数据转换为字符串。
+func add(a, b string) string {
+	//进位
+	carry := 0
+	//结果
+	result := ""
+	//两个数的长度
+	lenA := len(a)
+	lenB := len(b)
+	//两个数的长度不一样，补齐
+	if lenA > lenB {
+		for i := 0; i < lenA-lenB; i++ {
+			b = "0" + b
+		}
+	} else {
+		for i := 0; i < lenB-lenA; i++ {
+			a = "0" + a
+		}
+	}
+	//从个位开始相加
+	for i := len(a) - 1; i >= 0; i-- {
+		//两个数的和
+		fmt.Printf("%T, %v\n", a[i], a[i])
+		sum := int(a[i]-'0') + int(b[i]-'0') + carry
+		//进位
+		carry = sum / 10
+		//结果
+		result = strconv.Itoa(sum%10) + result
+	}
+	//最后一位有进位
+	if carry > 0 {
+		result = strconv.Itoa(carry) + result
+	}
+	return result
+}
+
+func main() {
+	fmt.Println(isAdditiveNumber("991100"))
+
+}

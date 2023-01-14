@@ -1,0 +1,21 @@
+这种题很简单，但是比较经典，除了要把非数字转化为数字之外，小写是大写的ASCII值加32
+
+func isPalindrome(s string) bool {
+	//将所有大写字母转化为小写字母，去掉非字母
+	var str string
+	for _, v := range s {
+		if v >= 'A' && v <= 'Z' {
+			str += string(v + 32)
+		} else if (v >= 'a' && v <= 'z') || (v >= '0' && v <= '9') {
+			str += string(v)
+		}
+	}
+	//判断是否为回文
+	for i := 0; i < len(str)/2; i++ {
+		if str[i] != str[len(str)-1-i] {
+			return false
+		}
+	}
+	return true
+
+}

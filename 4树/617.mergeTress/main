@@ -1,0 +1,26 @@
+This problem uses a recursive approach to solve the merging of binary trees. In general recursion is divided into two end conditions. First, the encountered node appears empty node, directly return the other node of the successor node, if both are empty natural return is empty, does not affect. Second, in the case of two nodes are not empty, you need a new node to merge the two values into one, this new node as the entrance to the recursion, naturally to be connected with the previous branch, but also to be connected with the back, then the left pointer will be root1 and 2 of the left subtree merger, the right side of the same, and finally return to this new node.
+The recursion starts from the last leaf node, so the merged nodes are created in order from the end to connect to the left and right pointers of the previous nodes.
+
+my code:
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func mergeTrees(root1 *TreeNode, root2 *TreeNode) *TreeNode {
+	if root1 == nil {
+		return root2
+	}
+	if root2 == nil {
+		return root1
+	}
+	var res TreeNode
+	temp := root1.Val + root2.Val
+	res.Val = temp
+	res.Left = mergeTrees(root1.Left, root2.Left)
+	res.Right = mergeTrees(root1.Right, root2.Right)
+
+	return &res
+
+}

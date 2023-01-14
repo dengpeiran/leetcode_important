@@ -1,0 +1,33 @@
+这是一个标准的递归从根到叶子节点时将路径值相加且记录，当遇到叶子结点并且值满足sum目标时将这一条path记录。当然这一题有两点需要注意：
+1.path数组时一元的，他对于闭包函数来说是全局变量，进入递归后path只能记录一条路径，当满足了条件后，必须把path转移记录到一个新的切片中在append到结果数组里，否则当path在后续地柜中更改，结果会被覆盖。（这一点原因是：path这种数组是引用类型，相当于是地址，当地址中的值被改变，结果数组存的地址指向的值一起被修改了）
+2.path进入递归遍历后，只能记录一条路径，无论这一条路径最后是否符合，在出递归时，都应该把本节点的值从path数组末尾删除，再返回上一层递归中，以便于上一层递归继续返回或者访问其右子树（如果当前是左子树的话，path要遍历右子树时肯定是先删掉左子树，再进入右子树，也就是必须把自己删除再返回上一层）
+
+my code：
+
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func pathSum(root *TreeNode, targetSum int) [][]int {
+	var res [][]int
+	var path []int
+	var dfs func(root *TreeNode, targetSum int)
+	dfs = func(root *TreeNode, targetSum int) {
+		if root == nil {
+			return
+		}
+		path = append(path, root.Val)
+		targetSum -= root.Val
+		if root.Left == nil && root.Right == nil && targetSum == 0 {
+			res = append(res, append([]int(nil), path...)) //这里要注意，要append一个新的切片，否则path会被修改,因为path是引用类型,在递归过程中path不断在变化，不每次保存就会出错
+		}
+		dfs(root.Left, targetSum)
+		dfs(root.Right, targetSum)
+		path = path[:len(path)-1] //回溯，删除当前遍历的节点加到path中的值，因为path只能保存一条路径，如果不每次出递归时把最后一个节点删除，那么path会一直保存着所有的节点，导致结果错误
+	}
+	dfs(root, targetSum)
+	return res
+
+}

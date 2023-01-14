@@ -1,0 +1,33 @@
+此题为明显的二叉树深度遍历，使用golang的闭包函数，创建一个保存路径的数组，每当访问到一个叶子节点时，就将当前保存的路径增加到路径数组中作为其中的一个string字符串。
+闭包函数进行递归访问，先将当前节点判断是否为空，然后将值放入->xxx中，然后先判断是否还有左右子树，没有就直接返回，有子树就加一个->再继续递归。
+
+ my code:
+ type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func binaryTreePaths(root *TreeNode) []string {
+	if root == nil {
+		return nil
+	}
+	var res []string
+	var dfs func(*TreeNode, string)
+	dfs = func(node *TreeNode, path string) {
+		if node == nil {
+			return
+		}
+		path += fmt.Sprintf("%d", node.Val)
+		if node.Left == nil && node.Right == nil {
+			res = append(res, path)
+			return
+		}
+		path += "->"
+		dfs(node.Left, path)
+		dfs(node.Right, path)
+	}
+	dfs(root, "")
+	return res
+
+}

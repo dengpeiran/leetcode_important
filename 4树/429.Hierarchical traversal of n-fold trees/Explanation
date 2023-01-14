@@ -1,0 +1,29 @@
+n叉树的层次遍历与二叉树本质上没有却别，只需要把每个节点的儿子节点入队时换成一个循环遍历入队，二叉树只用考虑左右节点。
+
+my code：
+type Node struct {
+	Val      int
+	Children []*Node
+}
+
+func levelOrder(root *Node) [][]int {
+	if root == nil {
+		return nil
+	}
+	queue := []*Node{root}
+	res := [][]int{}
+	for len(queue) > 0 {
+		size := len(queue)
+		tmp := []int{}
+		for i := 0; i < size; i++ {
+			node := queue[0]
+			queue = queue[1:]
+			tmp = append(tmp, node.Val)
+			for _, child := range node.Children {  //与二叉树层次遍历不同的地方，要遍历每个节点的子树指针数组
+				queue = append(queue, child)
+			}
+		}
+		res = append(res, tmp)
+	}
+	return res
+}

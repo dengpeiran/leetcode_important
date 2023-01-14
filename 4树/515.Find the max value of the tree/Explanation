@@ -1,0 +1,37 @@
+本题依然是和513一样，只需要在树的层次遍历上增加异步，用temp保存每一行遍历时的最大节点值，然后在一行遍历结束时将这个最大值放入数组
+
+my code：
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func largestValues(root *TreeNode) []int {
+	if root == nil {
+		return nil
+	}
+	var max []int
+	queue := []*TreeNode{root}
+	for len(queue) > 0 {
+		len := len(queue)
+		temp := queue[0].Val
+		for i := 0; i < len; i++ {
+			root = queue[0]
+			if root.Val > temp {
+				temp = root.Val
+			}
+			queue = queue[1:]
+			if root.Left != nil {
+				queue = append(queue, root.Left)
+			}
+			if root.Right != nil {
+				queue = append(queue, root.Right)
+			}
+
+		}
+		max = append(max, temp)
+	}
+	return max
+
+}

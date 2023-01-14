@@ -1,0 +1,21 @@
+本题为前缀和题解问题。
+很显然Sn-Sn-1=an成立。所以我们单独配置一个数组用来保存每个数字的前缀和，当输入区域范围时直接将两个前缀和相减即为答案。
+
+type NumArray struct {
+	sums []int
+}
+
+func Constructor(nums []int) NumArray {
+	//计算前缀和
+	sums := make([]int, len(nums)+1)
+	for i, v := range nums {
+		sums[i+1] = sums[i] + v
+	}
+	return NumArray{sums: sums}
+
+}
+
+func (this *NumArray) SumRange(left int, right int) int {
+	return this.sums[right+1] - this.sums[left]
+
+}

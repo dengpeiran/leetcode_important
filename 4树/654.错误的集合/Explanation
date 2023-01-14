@@ -1,0 +1,22 @@
+用哈希表把所有数字次数出现的次数记录下来，如果出现了两次的就是错误，一次都没有出现就是缺少的
+
+my code：
+func findErrorNums(nums []int) []int {
+	//创建一个长度为nums的哈希表
+	mark := map[int]int{}
+	for _, v := range nums {
+		mark[v]++
+	}
+	//遍历哈希表，找到重复的数字和缺失的数字
+	var repeat, miss int
+	for i := 1; i <= len(nums); i++ {
+		if mark[i] == 2 {
+			repeat = i
+		}
+		if mark[i] == 0 {
+			miss = i
+		}
+	}
+	return []int{repeat, miss}
+
+}

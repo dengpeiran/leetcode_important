@@ -1,0 +1,36 @@
+本题为完美二叉树层次遍历后，将每个节点的next指针指向右边一个节点即可。
+所以解题思路就是在层次遍历时加一个判断是否为当前这一层最后一个即可
+
+my code：
+type Node struct {
+	Val   int
+	Left  *Node
+	Right *Node
+	Next  *Node
+}
+
+func connect(root *Node) *Node {
+	//层次遍历
+	if root == nil {
+		return root
+	}
+	queue := []*Node{root}
+	for len(queue) > 0 {
+		size := len(queue)
+		for i := 0; i < size; i++ {
+			node := queue[0]
+			queue = queue[1:]
+			if i < size-1 {
+				node.Next = queue[0]
+			}
+			if node.Left != nil {
+				queue = append(queue, node.Left)
+			}
+			if node.Right != nil {
+				queue = append(queue, node.Right)
+			}
+		}
+	}
+	return root
+
+}

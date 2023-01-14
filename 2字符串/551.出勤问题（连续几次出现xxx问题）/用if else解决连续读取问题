@@ -1,0 +1,27 @@
+当读取一个训话string中每个字母时，要识别同一个字母是否连续出现，可以利用if...else... else用来对不是该字母出现时计数器清零，如果只是累计技术，则不需要else来清零
+
+
+比如本题 A只要累计出现2次就不行 而L需要连续出现3次 所以连续出现的问题要加上else作为清零
+
+
+func checkRecord(s string) bool {
+	var aCount, lCount int
+	for _, v := range s {
+		if v == 'A' {
+			aCount++
+			if aCount > 1 {
+				return false
+			}
+		}
+		if v == 'L' { //连续三个L，这个构造就可以巧妙解决连续几次的问题，if else结构可以解决连续几次的问题
+			lCount++
+			if lCount > 2 {
+				return false
+			}
+		} else {
+			lCount = 0
+		}
+	}
+	return true
+
+}

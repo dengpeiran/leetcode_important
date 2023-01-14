@@ -1,0 +1,32 @@
+This problem still uses recursion to handle binary tree traversal. It is worth mentioning that at this point, the paths and are required to be equal to the target value, and not a fixed start and end node, so each node is calculated once as the starting point to begin with.
+
+Starting from the root node, the recursion is entered from the left and right subtrees of the root node, and the sum of the three is all possible. Then, the end condition of the recursive function is to traverse to the empty node are not met target, directly return 0. When the recursive function current node value and the target value is the same, indicating that a path to meet, because the target value each time into the next layer of recursion will be subtracted from the current node value, the next layer into the target value is in addition to the above path after reaching the target value of the difference.
+
+
+mycode：
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func pathSum(root *TreeNode, targetSum int) int {
+	if root == nil {
+		return 0
+	}
+	return dfs(root, targetSum) + pathSum(root.Left, targetSum) + pathSum(root.Right, targetSum)
+
+}
+
+func dfs(root *TreeNode, targetSum int) int {
+	if root == nil {
+		return 0
+	}
+	res := 0
+	if root.Val == targetSum {
+		res++
+	}
+	res += dfs(root.Left, targetSum-root.Val)
+	res += dfs(root.Right, targetSum-root.Val)
+	return res
+}

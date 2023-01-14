@@ -1,0 +1,26 @@
+当输入depth 为 1 时，需要创建一个新的root，并将原root 作为新root 的左子节点。当 depth 为 2 时，需要在 \textit{root}root 下新增两个节点 left 和 right 作为root 的新子节点，并把原左子节点作为left 的左子节点，把原右子节点作为right 的右子节点。当depth 大于 2 时，需要继续递归往下层搜索，并将depth 减去 1，直到搜索到 depth 为 2。
+
+my code:
+type TreeNode struct {
+	Val   int
+	Left  *TreeNode
+	Right *TreeNode
+}
+
+func addOneRow(root *TreeNode, val int, depth int) *TreeNode {
+	if depth == 1 { //如果深度为1，直接返回新节点
+		return &TreeNode{val, root, nil} //插入到根节点
+	}
+	if root == nil {
+		return nil
+	}
+	if depth == 2 { //插入到左右子节点
+		root.Left = &TreeNode{val, root.Left, nil}   //插入到左子节点
+		root.Right = &TreeNode{val, nil, root.Right} //插入到右子节点
+		return root
+	}
+	root.Left = addOneRow(root.Left, val, depth-1)
+	root.Right = addOneRow(root.Right, val, depth-1)
+	return root
+
+}

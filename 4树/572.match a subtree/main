@@ -1,0 +1,30 @@
+Match a subtree in a tree. Main idea: deep traversal to find the node with the same root as the subtree, and synchronous traversal of the two trees starting from this node. The two trees are matched if and only if they overlap exactly and neither has any extra branches.
+
+The algorithm is still recursive, starting from the root node to determine whether it is empty, whether the two trees are identical, otherwise it returns the result of matching the left and right subtrees of the root node with the subroot.
+
+Determining whether the two trees are the same can be done independently using a function that identifies whether the trees starting from each node are identical. It is also inherently implemented recursively, with the stopping condition that both nodes are empty or one is empty or has a different value.
+
+my code:
+func isSubtree(root *TreeNode, subRoot *TreeNode) bool {
+	if root == nil {
+		return false
+	}
+	if isSameTree(root, subRoot) {
+		return true
+	}
+	return isSubtree(root.Left, subRoot) || isSubtree(root.Right, subRoot)
+
+}
+
+func isSameTree(p *TreeNode, q *TreeNode) bool {
+	if p == nil && q == nil {
+		return true
+	}
+	if p == nil || q == nil {
+		return false
+	}
+	if p.Val != q.Val {
+		return false
+	}
+	return isSameTree(p.Left, q.Left) && isSameTree(p.Right, q.Right)
+}

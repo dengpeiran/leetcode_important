@@ -1,0 +1,17 @@
+给你一个长度为 n 的整数数组，每次操作将会使 n - 1 个元素增加 1 。返回让数组所有元素相等的最小操
+
+本题是一个数学题，给n-1个数字加一相当于给1个数字-1，所以找到最小值，然后求所有数字和最小值的差值和，就是最少执行次数。
+
+func minMoves(nums []int) int {
+	if len(nums) == 0 {
+		return 0
+	}
+	sort.Ints(nums)
+	min := nums[0]
+	sum := 0
+	for _, v := range nums {
+		sum += v - min
+	}
+	return sum
+
+}

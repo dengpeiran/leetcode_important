@@ -1,0 +1,21 @@
+This problem is solved by creating a recursive function that compares the left subtree with the right subtree. The code is tested to be correct, but the force buckle does not compile and the reason cannot be found.
+
+my code：
+
+func isSymmetric(root *TreeNode) bool {
+	if root == nil {
+		return true
+	}
+	return isMirror(root.Left, root.Right)
+
+}
+
+func isMirror(left *TreeNode, right *TreeNode) bool {
+	if left == nil && right == nil {
+		return true
+	}
+	if left == nil || right == nil {
+		return false
+	}
+	return left.Val == right.Val && isMirror(left.Left, right.Right) && isMirror(left.Right, right.Left)
+}
