@@ -1,0 +1,12 @@
+这一题就是运用了二进制数与其本身-1进行&运算后会去掉最后一位1的特性。
+当一个二进制数为0时则表明该数一个1都没有，所以只要不是0就还有1存在，去掉最后一位1，res自增记录，以此类推。
+
+func hammingWeight(num uint32) int {
+	var res int
+	for num != 0 {
+		num = num & (num - 1)
+
+	}
+	return res
+}
+
