@@ -1,0 +1,16 @@
+本题目的是让一个数的二进制是间隔的0和1，那么如何得到一个数的每一位2进制位是多少呢
+
+方法是将这个数对2求余数，那么余数就是最低位的二进制位，再除2来将最低位移除，以此类推，只要两个连续的二进制位一样，就不符合要求。
+
+func hasAlternatingBits(n int) bool {
+	pre := 10
+	for n > 0 {
+		if n%2 == pre {
+			return false
+		}
+		pre = n % 2
+		n = n / 2
+	}
+	return true
+
+}
