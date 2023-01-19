@@ -1,0 +1,19 @@
+主要是要确定这个数所在的位置时几位数，1,2,3,。。。。 然后再在里面定位是第几个
+
+func findNthDigit(n int) int {
+	digit := 1 //n所在的数字位数
+	start := 1 //n所在的数字范围的开始数字
+	count := 9 //n所在的数字范围的数字个数
+	//找到n所在的数字位数
+	for n > count {
+		n = n - count             //n减去n所在的数字范围的数字个数
+		digit++                   //位数+1
+		start = start * 10        //开始数字*10
+		count = 9 * start * digit //数字个数
+	}
+	//找到n所在的数字
+	num := start + (n-1)/digit //n所在的数字
+	//找到n所在的数字的第几位
+	return int(num / int(math.Pow10(digit-(n-1)%digit-1)) % 10)
+
+}
