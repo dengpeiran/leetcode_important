@@ -1,0 +1,32 @@
+本题本质是就是模拟了一个栈来记录比赛每局得分，最后将分数加起来，因为会涉及到上一局和上上局的数据读取和删除，所以优先考虑使用栈
+
+*******需要注意的是：string数组保存的是多个字符串形式的数字，当存入int栈时是不能直接存的，需要转为int，那么一般会使用strconv包中的Atoi来转换，不要自行重写atoi函数，原因是当出现负数时会比较复杂*******
+
+import (
+	"fmt"
+	"strconv"
+)
+
+func calPoints(operations []string) int {
+	var stack []int
+	for _, v := range operations {
+		switch v {
+		case "C":
+			stack = stack[:len(stack)-1]
+		case "D":
+			stack = append(stack, stack[len(stack)-1]*2)
+		case "+":
+			stack = append(stack, stack[len(stack)-1]+stack[len(stack)-2])
+		default:
+			c, _ := strconv.Atoi(v)
+			stack = append(stack, c)
+		}
+	}
+	var sum int
+	for _, v := range stack {
+		sum += v
+	}
+	return sum
+
+}
+
