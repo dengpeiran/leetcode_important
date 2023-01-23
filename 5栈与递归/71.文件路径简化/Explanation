@@ -1,0 +1,34 @@
+在 Unix 风格的文件系统中，一个点（.）表示当前目录本身；此外，两个点 （..） 表示将目录切换到上一级（指向父目录）；
+两者都可以是复杂相对路径的组成部分。任意多个连续的斜杠（即，'//'）都被视为单个斜杠 '/' 。 
+
+总结的规律就是，按照/的划分来读取地址中的每一节，当读到空就是表明有多个/连在一起，读到.则表明当前目录，所以不管。
+当读到两个.则表明当前目录需要回退到根目录，那么栈只要不空，就让栈顶元素出栈。读到其他元素全部入栈，都是合法的。
+
+
+********值得注意*******
+第一个是strings包中的Splitf方法和Join方法，他们可以根据函数第二个之来划分、合并string变量
+
+
+
+import (
+	"fmt"
+	"strings"
+)
+
+func simplifyPath(path string) string {
+	var stack []string
+	for _, s := range strings.Split(path, "/") { //分割字符串
+		if s == "" || s == "." { //如果是空或者是.就跳过
+			continue
+		}
+		if s == ".." { //如果是..就弹出栈顶元素
+			if len(stack) > 0 {
+				stack = stack[:len(stack)-1]
+			}
+			continue
+		}
+		stack = append(stack, s)
+	}
+	return "/" + strings.Join(stack, "/") //拼接字符串,用/分割
+
+}
