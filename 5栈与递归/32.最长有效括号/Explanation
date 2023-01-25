@@ -1,0 +1,36 @@
+这一题与判断是否匹配的不同，他需要判断最长匹配的长度。
+当我们遇到一个无法匹配的）时，用设置好的一个start去记录他的位置，将start的位置设置在第一个符合匹配规则的（位置上。
+
+遍历整个串，将（直接入队，一旦出现）就先判断栈里面是不是空的好改变start位置。如果栈不空，那证明有(可以去匹配，那么就弹出一个）后再去观察栈。
+如果弹出后栈变空的，证明从start开始倒目前的位置是一个最长括号，记录一下。
+如果弹出后栈不为空，那证明还有（待匹配，此时最长的就是目前为止到最后一个（d的位置是一个最长括号。
+
+func longestValidParentheses(s string) int {
+	max := 0
+	start := 0
+	stack := []int{}
+	for i, v := range s {
+		if v == '(' {
+			stack = append(stack, i) //将左括号的位置压入栈
+		} else {
+			if len(stack) == 0 { //如果栈为空，说明当前位置到start之间的括号是无效的，start向后移动一位
+				start = i + 1
+			} else {
+				stack = stack[:len(stack)-1]
+				if len(stack) == 0 { //如果栈为空，说明当前位置到start之间的括号是有效的
+					if max < i-start {
+						max = i - start + 1
+					}
+				} else { //如果栈不为空，说明当前位置到栈顶的位置之间的括号是有效的
+					if max < i-stack[len(stack)-1] {
+						max = i - stack[len(stack)-1]
+					}
+
+				}
+			}
+
+		}
+	}
+	return max
+
+}
