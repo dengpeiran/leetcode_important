@@ -1,0 +1,52 @@
+字符串解码的本质是暂存所有数字系数和字符，遇到[则表明有新的需要解码的串，于是将已经暂存的推入栈中，更新新的需要解码的部分。
+最后每次遇到]就表示一段结束，把这一段解码后与栈顶最近的一段已经解码的连到一起。
+
+*********值得注意的是字符串string为多个byte型连接而成，所以切分string为单个字符后，是byte型，这个时候需要用int（）或string（）来进行强制类型转换。
+然而，sring类型通过切割或+连接后无论长短，还是string类型，比如sring类型的123切割后得到23依然是string类型，此时要得到int的123需要用strconv.Atoi（）函数。
+但是如果是x[1]和x[2]得到的2和3，就是2和3的asii码值，此时要得到int的23还需要减去‘0’后再强制转换。*************
+
+
+
+
+func decodeString(s string) string {
+	//设置一个数字栈
+	numStack := make([]int, 0)
+	//设置一个字符串栈
+	strStack := make([]string, 0)
+	//设置一个临时字符串
+	tempStr := ""
+	//设置一个临时数字
+	tempNum := 0
+	//遍历字符串
+	for i := 0; i < len(s); i++ {
+		if s[i] >= '0' && s[i] <= '9' {
+			//如果是数字，就把数字转换成数字
+			tempNum = tempNum*10 + int(s[i]-'0')
+		} else if s[i] == '[' {
+			//如果是[，就把数字和字符串分别压入栈中
+			numStack = append(numStack, tempNum)
+			strStack = append(strStack, tempStr)
+			//把数字和字符串清空
+			tempNum = 0
+			tempStr = ""
+		} else if s[i] == ']' {
+			//如果是]，就把数字和字符串分别弹出栈中
+			num := numStack[len(numStack)-1]
+			numStack = numStack[:len(numStack)-1]
+			str := strStack[len(strStack)-1]
+			strStack = strStack[:len(strStack)-1]
+			//把字符串重复num次
+			for j := 0; j < num; j++ {
+				str += tempStr
+			}
+			//把字符串赋值给tempStr
+			tempStr = str
+
+		} else {
+			//如果是字母，就把字母加入到tempStr中
+			tempStr += string(s[i])
+		}
+	}
+	return tempStr
+
+}
