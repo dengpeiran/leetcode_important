@@ -1,0 +1,38 @@
+这一题是较为复杂的双向多层链表，但是理清楚逻辑后，还是基于递归的dfs函数遍历实现，将每一级函数的尾部指针与入口指针的下一个节点相连，就是dfs函数完成的工作。
+
+type Node struct {
+	Val   int
+	Prev  *Node
+	Next  *Node
+	Child *Node
+}
+
+func dfs(root *Node) (last *Node) {
+	cur := root
+	for cur != nil {
+		if cur.Child != nil {
+			temp := cur.Next //这里的temp是cur的下一个节点，如果cur.Child不为空，那么cur.Child的最后一个节点的Next就是temp
+			cur.Next = cur.Child
+			cur.Next.Prev = cur
+			endnode := dfs(cur.Child) //这里的endnode是cur.Child的最后一个节点
+			cur.Child = nil           //将cur.Child置空
+			if temp != nil {          //如果temp不为空，那么将endnode的Next指向temp，temp的Prev指向endnode
+				temp.Prev = endnode
+				endnode.Next = temp
+			}
+
+		} else {
+			last = cur //如果cur.Child为空，那么last就是cur,不能直接在最后返回cur，因为cur在最后是nil，是要返回节点的空指针，所以每次遇到没有Child的节点，都要更新last
+		}
+		cur = cur.Next //cur指向下一个节点
+
+	}
+
+	return last
+
+}
+
+func flatten(root *Node) *Node {
+	dfs(root)
+	return root
+}
