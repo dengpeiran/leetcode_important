@@ -1,0 +1,21 @@
+翻转链表的核心是设置一个pre指针来指向原链表的每个前序节点，自然而然的初始化时pre是nil，那么第一个节点的后续指针指向它时也会被初始化为nil，
+当最后整个链表翻转，pre也会自然的挪动到原链表最后一个节点上。
+
+
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func reverseList(head *ListNode) *ListNode {
+    var pre *ListNode
+    for head!=nil{
+           next:=head.Next
+           head.Next=pre
+           pre=head
+           head=next
+    }
+    return pre
+}
