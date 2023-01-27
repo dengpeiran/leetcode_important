@@ -1,0 +1,35 @@
+旋转链表的思路是：将原链表的尾结点与首节点连接起来，再找到新链表的首尾节点所在位置，断开连接即可。
+主要难度在于如何找到旋转后的新链表首尾节点的位置，这需要知道链表节点的长度，新链表的最后一个节点为原链表从0开始计数的第 (n-1)-(k mod n)个。
+
+
+/**
+ * Definition for singly-linked list.
+ * type ListNode struct {
+ *     Val int
+ *     Next *ListNode
+ * }
+ */
+func rotateRight(head *ListNode, k int) *ListNode {
+    node:=head
+    var endnode *ListNode
+    n:=0
+    if head==nil{
+        return nil
+    }
+
+    for node!=nil{
+        endnode=node
+        node=node.Next
+        n++
+    }
+    if endnode!=nil{
+        endnode.Next=head
+    }
+    for i:=0;i<n - k % n - 1;i++{
+        head=head.Next
+    }
+    temp:=head
+    head=head.Next
+    temp.Next=nil
+    return head
+}
