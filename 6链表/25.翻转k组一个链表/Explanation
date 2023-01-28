@@ -1,0 +1,32 @@
+翻转k个一组和翻转l到r非常类似，本质上也是将要翻转的部分分离开，然后整个翻转后再和首尾连接。
+
+函数的第一个部分是确定每个k循环，再记录k循环的头尾和前驱后继后，断开整个k循环，送到翻转链表函数中。
+最后连接反转后的k循环，然后将pre和end挪到尾部。
+
+func reversekList(head *ListNode, k int) *ListNode { //穿针法完成链表k组反转。
+	if head == nil {
+		return head
+	}
+	hair := &ListNode{Next: head}
+	pre := hair
+	end := hair
+	for end.Next != nil {
+		for i := 0; i < k && end != nil; i++ {
+			end = end.Next
+		}
+		if end == nil {
+			break
+		}
+		nextbegin := end.Next
+		curbrgin := pre.Next
+		end.Next = nil
+		new := reverse(curbrgin)
+		pre.Next = new
+		curbrgin.Next = nextbegin
+		pre = curbrgin
+		end = curbrgin
+
+	}
+	return hair.Next
+
+}
