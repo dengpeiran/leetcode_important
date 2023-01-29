@@ -1,4 +1,4 @@
-翻转链表的核心是设置一个pre指针来指向原链表的每个前序节点，自然而然的初始化时pre是nil，那么第一个节点的后续指针指向它时也会被初始化为nil，
+翻转链表的核心是设置一个pre指针来指向原链表的每个前序节点，cur指向第一个节点，带领整个链表掉头。
 当最后整个链表翻转，pre也会自然的挪动到原链表最后一个节点上。
 
 
@@ -9,13 +9,15 @@
  *     Next *ListNode
  * }
  */
-func reverseList(head *ListNode) *ListNode {
-    var pre *ListNode
-    for head!=nil{
-           next:=head.Next
-           head.Next=pre
-           pre=head
-           head=next
-    }
-    return pre
+func rv(head *ListNode) *ListNode {
+	hair := &ListNode{Next: head}
+	pre := hair
+	cur := pre.Next
+	for cur != nil && cur.Next != nil {
+		temp := cur.Next
+		cur.Next = temp.Next
+		temp.Next = pre.Next
+		pre.Next = temp
+	}
+	return hair.Next
 }
