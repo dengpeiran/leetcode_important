@@ -1,0 +1,30 @@
+用哈希表的时候，会遇到要读取某个key是否为空值的情况，这个时候就需要用第二个参数来接 _,ok:=map[key]中的ok就是布尔型的参数，用来表示该key对应的哈希值是否为空。
+
+如果不用两个参数，如果只用一个值来接受 map 的返回值，那么返回的就是 key 所对应的的 value，如果 key 不存在，返回空。
+
+func wordPattern(pattern string, s string) bool {
+	mark := make(map[rune]string)
+	temp := strings.Split(s, " ")
+    	if len(pattern) != len(temp) {
+		return false
+	}
+	for k, v := range pattern {
+		if _, ok := mark[v]; ok { //如果存在这个key，就判断是否相等。ok接收的是bool类型，如果存在就是true，不存在就是false。
+			if mark[v] != temp[k] {
+				return false
+			}
+		} else {
+			mark[v] = temp[k]
+		}
+	}
+	//如果不同的key对应的value相同，就返回false
+	for k, v := range mark {
+		for k1, v1 := range mark {
+			if k != k1 && v == v1 {
+				return false
+			}
+		}
+	}
+	return true
+
+}
