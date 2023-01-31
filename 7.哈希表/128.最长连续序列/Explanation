@@ -1,0 +1,28 @@
+在乱序的数组中找到最长连续的序列，第一反应是用哈希表记录每个数字出现的次数，然后遍历哈希表，找出最长的连续数字。
+
+但是此题最容易出现的问题是超时，因为在找最长序列时，1234在1时，会遍历1234，到了2时还会读一遍234，以此类推算法的时间复杂度回答道n^2。
+
+于是在进入每一个数字进行最长判断时，加一个限制条件，那就是前面的数字不连续，比如在进入2时，要求是1出现次数为0，如果1有出现过，那么2开始的循环是不必要的，也不可能超过1开始的序列
+
+func longestConsecutive(nums []int) int {
+	mark := make(map[int]int)
+	for _, v := range nums {
+		mark[v]++
+	}
+	maxlen := 0
+	for num, _ := range mark {
+		if mark[num-1] == 0 { //找到连续序列的起点,这是算法不超时的关键，因为如果不判断，那么每个元素都会被遍历一次，时间复杂度为O(n^2)
+			templen := 1
+			curnum := num
+			for mark[curnum+1] > 0 {
+				templen++
+				curnum++
+			}
+			if templen > maxlen {
+				maxlen = templen
+			}
+		}
+	}
+	return maxlen
+
+}
