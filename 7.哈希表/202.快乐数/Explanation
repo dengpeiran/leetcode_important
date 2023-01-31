@@ -1,0 +1,28 @@
+本题考察的是如何判断某个循环是死循环，当不断地把某个数每一位拆分并平方和累加得到新数字后，可能会出现循环，那么如何让程序在合适的地方跳出，这就需要利用哈希表
+
+哈希表可以记录每个数字出现的次数，当某一个计算出的平方和已经被哈希表记录到出现过一次后，就直接返回flase
+
+func isHappy(n int) bool {
+    mark:=make(map[int]bool)
+    sum:=0
+    for true{
+        for n>0{
+            tmp:=n%10
+            n=n/10
+            sum+=tmp*tmp
+        }
+        if sum==1{
+            return true
+        }else{
+            if mark[sum]{
+                return false
+            }else{
+                mark[sum]=true
+            }
+        }
+        n=sum
+        sum=0
+    }
+    return false
+
+}
