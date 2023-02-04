@@ -1,0 +1,35 @@
+深拷贝与浅拷贝不同，浅拷贝可以只复制节点的地址，但是深拷贝需要完全新的节点地址来保存数据。而在这个问题中，只需要用两个指针对应建立新的节点就可以复制了。
+最困难的是如何记录每个节点带的随机指针，该指针可能为空也可能指向任意其他节点。因此，我们需要构造一个原节点到拷贝节点的映射，也就是哈希表。
+在该哈希表中，key对应的是旧节点地址，value对应的是复制的新节点地址。遍历哈希表，当一个旧节点的随机指针不空，就利用map[old.random]就可以得到旧节点随机指针指向的节点对应的新节点地址。
+
+/**
+ * Definition for a Node.
+ * type Node struct {
+ *     Val int
+ *     Next *Node
+ *     Random *Node
+ * }
+ */
+
+func copyRandomList(head *Node) *Node {
+    old:=head
+    next:=&Node{Val:1}
+    hair:=&Node{Next:next}
+    hash:=make(map[*Node]*Node)
+    for old!=nil{
+        temp:=&Node{Val:old.Val}
+        next.Next=temp
+        hash[old]=temp
+        next=temp
+        old=old.Next
+    }
+    for k,v:=range hash{
+        if k.Random==nil{
+            v.Random=nil
+        }else{
+            v.Random=hash[k.Random] 
+        }
+    }
+    return hair.Next.Next
+    
+}
